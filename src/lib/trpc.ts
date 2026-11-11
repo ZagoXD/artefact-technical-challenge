@@ -10,6 +10,7 @@ export function errorMessage(error: unknown) {
   if (error instanceof TRPCClientError && !error.data) {
     return "Unable to reach the server. Check your connection and try again.";
   }
-  return error instanceof Error ? error.message : "Something went wrong. Please try again.";
+  return error instanceof Error
+    ? error.message
+    : "Something went wrong. Please try again.";
 }
-

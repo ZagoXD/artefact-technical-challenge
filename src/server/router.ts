@@ -7,16 +7,19 @@ const t = initTRPC.context<{ store: TaskStore }>().create({
   errorFormatter({ shape, error }) {
     return {
       ...shape,
-      message: error.cause instanceof z.ZodError
-        ? error.cause.issues[0].message
-        : shape.message,
+      message:
+        error.cause instanceof z.ZodError
+          ? error.cause.issues[0].message
+          : shape.message,
     };
   },
 });
-const pagination = z.object({
-  cursor: z.number().int().nonnegative().default(0),
-  limit: z.number().int().min(1).max(50).default(10),
-}).default({ cursor: 0, limit: 10 });
+const pagination = z
+  .object({
+    cursor: z.number().int().nonnegative().default(0),
+    limit: z.number().int().min(1).max(50).default(10),
+  })
+  .default({ cursor: 0, limit: 10 });
 
 export const appRouter = t.router({
   tasks: t.router({
@@ -28,25 +31,41 @@ export const appRouter = t.router({
       const page = rows.slice(0, input.limit);
       return {
         items: page.map((row) => row.task),
-        nextCursor: rows.length > input.limit ? page[page.length - 1].sequence : null,
+        nextCursor:
+          rows.length > input.limit ? page[page.length - 1].sequence : null,
       };
     }),
     get: t.procedure.input(taskId).query(({ ctx, input }) => {
       const row = ctx.store.tasks.get(input.id);
-      if (!row) throw new TRPCError({ code: "NOT_FOUND", message: "Task not found." });
+      if (!row)
+        throw new TRPCError({ code: "NOT_FOUND", message: "Task not found." });
       return row.task;
     }),
     create: t.procedure.input(taskFields).mutation(({ ctx, input }) => {
-      const task = { ...input, id: crypto.randomUUID(), dataCriacao: Date.now() };
+      const task = {
+        ...input,
+        id: crypto.randomUUID(),
+        dataCriacao: Date.now(),
+      };
       ctx.store.tasks.set(task.id, { task, sequence: ++ctx.store.sequence });
       return task;
     }),
-    update: t.procedure.input(taskFields.merge(taskId)).mutation(({ ctx, input }) => {
-      const row = ctx.store.tasks.get(input.id);
-      if (!row) throw new TRPCError({ code: "NOT_FOUND", message: "Task not found." });
-      row.task = { ...row.task, titulo: input.titulo, descricao: input.descricao };
-      return row.task;
-    }),
+    update: t.procedure
+      .input(taskFields.merge(taskId))
+      .mutation(({ ctx, input }) => {
+        const row = ctx.store.tasks.get(input.id);
+        if (!row)
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Task not found.",
+          });
+        row.task = {
+          ...row.task,
+          titulo: input.titulo,
+          descricao: input.descricao,
+        };
+        return row.task;
+      }),
     delete: t.procedure.input(taskId).mutation(({ ctx, input }) => {
       if (!ctx.store.tasks.delete(input.id)) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Task not found." });
@@ -57,4 +76,3 @@ export const appRouter = t.router({
 });
 export type AppRouter = typeof appRouter;
 export const createCaller = () => appRouter.createCaller({ store });
-
