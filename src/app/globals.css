@@ -1,42 +1,53 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+:root { color-scheme: light; --ink: #212b28; --muted: #626e68; --border: #dce2dc; --green: #275e45; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f7f8f5; color: var(--ink); font-family: Arial, Helvetica, sans-serif; line-height: 1.6; }
+a { color: inherit; text-underline-offset: 4px; }
+button, input, textarea { font: inherit; }
+button, .button, .secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 9px 18px; border: 1px solid transparent; border-radius: 7px; font-weight: 600; text-decoration: none; cursor: pointer; }
+button, .button { background: var(--green); color: white; }
+button:hover, .button:hover { background: #1c4833; }
+.secondary { background: white; color: var(--ink); border-color: var(--border); }
+.secondary:hover { background: #f0f3ee; }
+button:disabled { opacity: .55; cursor: wait; }
+:focus-visible { outline: 3px solid #a57422; outline-offset: 4px; }
+.topbar { border-bottom: 1px solid var(--border); background: white; padding: 20px max(24px, calc((100vw - 920px) / 2)); }
+.brand { font-size: 21px; font-weight: 700; letter-spacing: -.5px; text-decoration: none; }
+.brand span { font-size: 16px; color: var(--muted); font-weight: 400; letter-spacing: 0; }
+main { max-width: 920px; margin: 0 auto; padding: 52px 24px 24px; min-height: calc(100vh - 160px); }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+.eyebrow { font-size: 11px; font-weight: 700; color: var(--green); letter-spacing: 2px; margin: 0 0 8px; }
+h1 { font-size: clamp(28px, 5vw, 36px); line-height: 1.2; margin: 0 0 12px; letter-spacing: -1px; }
+h2 { margin: 0 0 8px; font-size: 19px; }
+p { margin: 0 0 16px; }
+.muted, .hint, time { color: var(--muted); }
+.panel { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 28px; }
+.empty { text-align: center; padding: 64px 24px; }
+.task-list { padding: 0; list-style: none; display: grid; gap: 16px; }
+.task { display: flex; gap: 24px; justify-content: space-between; align-items: flex-start; }
+.task-content { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.task h2 a { text-decoration: none; }
+.task h2 a:hover { text-decoration: underline; }
+.description { white-space: pre-wrap; margin-bottom: 12px; }
+time { font-size: 12px; }
+.actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.danger { background: white; border-color: #ead9d5; color: #9a3027; }
+.danger:hover { background: #fff0eb; }
+fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+label { display: block; font-weight: 600; margin-bottom: 8px; }
+label .muted { font-weight: 400; font-size: 14px; }
+input, textarea { width: 100%; border: 1px solid #afbcb2; background: white; color: var(--ink); border-radius: 6px; padding: 11px 12px; }
+textarea { resize: vertical; margin-bottom: 24px; }
+.hint { display: block; font-size: 12px; margin: 8px 0 24px; }
+.feedback { border-radius: 7px; padding: 12px 16px; margin-bottom: 20px; overflow-wrap: anywhere; }
+.success { background: #e9f2e7; color: #275331; }
+.error { background: #fff0eb; color: #942f23; }
+.load-more { text-align: center; padding: 16px; }
+footer { text-align: center; padding: 28px 20px; font-size: 12px; color: var(--muted); }
+.skip-link { position: absolute; top: -100px; left: 16px; background: white; padding: 12px; z-index: 1; }
+.skip-link:focus { top: 8px; }
+@media (max-width: 600px) {
+  main { padding: 32px 16px 16px; }
+  .page-header { align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+  .task { flex-direction: column; gap: 16px; padding: 20px; }
+  .panel.form { padding: 20px; }
 }
