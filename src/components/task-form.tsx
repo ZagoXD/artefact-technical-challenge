@@ -8,14 +8,14 @@ import { trpc, errorMessage } from "@/lib/trpc";
 
 export function TaskForm({ task }: { task?: Task }) {
   const router = useRouter();
-  const [titulo, setTitulo] = useState(task?.titulo ?? "");
-  const [descricao, setDescricao] = useState(task?.descricao ?? "");
+  const [title, setTitle] = useState(task?.title ?? "");
+  const [description, setDescription] = useState(task?.description ?? "");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const parsed = taskFields.safeParse({ titulo, descricao });
+    const parsed = taskFields.safeParse({ title, description });
     if (!parsed.success) {
       setError(parsed.error.issues[0].message);
       return;
@@ -36,14 +36,14 @@ export function TaskForm({ task }: { task?: Task }) {
   return (
     <form onSubmit={submit} className="panel form">
       <fieldset disabled={pending}>
-        <label htmlFor="titulo">
+        <label htmlFor="title">
           Title <span className="muted">(required)</span>
         </label>
         <input
-          id="titulo"
-          name="titulo"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
+          id="title"
+          name="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={120}
           autoFocus
@@ -52,14 +52,14 @@ export function TaskForm({ task }: { task?: Task }) {
         <p id="title-help" className="hint">
           A short, clear name. Up to 120 characters.
         </p>
-        <label htmlFor="descricao">
+        <label htmlFor="description">
           Description <span className="muted">(optional)</span>
         </label>
         <textarea
-          id="descricao"
-          name="descricao"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
+          id="description"
+          name="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
           maxLength={2000}
           rows={6}
         />
@@ -69,7 +69,7 @@ export function TaskForm({ task }: { task?: Task }) {
           </p>
         )}
         <div className="actions">
-          <button type="submit" disabled={!titulo.trim()}>
+          <button type="submit" disabled={!title.trim()}>
             {pending ? "Saving…" : task ? "Save changes" : "Create task"}
           </button>
           <Link href="/" className="secondary">

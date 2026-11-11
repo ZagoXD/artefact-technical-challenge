@@ -45,7 +45,7 @@ export const appRouter = t.router({
       const task = {
         ...input,
         id: crypto.randomUUID(),
-        dataCriacao: Date.now(),
+        createdAt: Date.now(),
       };
       ctx.store.tasks.set(task.id, { task, sequence: ++ctx.store.sequence });
       return task;
@@ -61,8 +61,8 @@ export const appRouter = t.router({
           });
         row.task = {
           ...row.task,
-          titulo: input.titulo,
-          descricao: input.descricao,
+          title: input.title,
+          description: input.description,
         };
         return row.task;
       }),

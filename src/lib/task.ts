@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const taskFields = z.object({
-  titulo: z
+  title: z
     .string()
     .trim()
     .min(1, "Title is required.")
     .max(120, "Use at most 120 characters."),
-  descricao: z
+  description: z
     .string()
     .trim()
     .max(2000, "Use at most 2,000 characters.")
@@ -15,6 +15,6 @@ export const taskFields = z.object({
 export const taskId = z.object({ id: z.string().uuid("Invalid task ID.") });
 export type Task = z.infer<typeof taskFields> & {
   id: string;
-  dataCriacao: number;
+  createdAt: number;
 };
 export type TaskPage = { items: Task[]; nextCursor: number | null };

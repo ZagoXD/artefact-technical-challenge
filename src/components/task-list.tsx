@@ -102,14 +102,14 @@ export function TaskList({
             <li key={task.id} className="panel task">
               <div className="task-content">
                 <h2>
-                  <Link href={`/tasks/${task.id}/edit`}>{task.titulo}</Link>
+                  <Link href={`/tasks/${task.id}/edit`}>{task.title}</Link>
                 </h2>
-                {task.descricao && (
-                  <p className="description">{task.descricao}</p>
+                {task.description && (
+                  <p className="description">{task.description}</p>
                 )}
-                <time dateTime={new Date(task.dataCriacao).toISOString()}>
+                <time dateTime={new Date(task.createdAt).toISOString()}>
                   Created{" "}
-                  {new Date(task.dataCriacao)
+                  {new Date(task.createdAt)
                     .toISOString()
                     .slice(0, 16)
                     .replace("T", " ")}{" "}
@@ -120,7 +120,7 @@ export function TaskList({
                 <Link
                   href={`/tasks/${task.id}/edit`}
                   className="secondary"
-                  aria-label={`Edit ${task.titulo}`}
+                  aria-label={`Edit ${task.title}`}
                 >
                   Edit
                 </Link>
@@ -128,7 +128,7 @@ export function TaskList({
                   className="danger"
                   onClick={() => remove(task.id)}
                   disabled={deleting !== null}
-                  aria-label={`Delete ${task.titulo}`}
+                  aria-label={`Delete ${task.title}`}
                 >
                   {deleting === task.id ? "Deleting…" : "Delete"}
                 </button>

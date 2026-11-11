@@ -53,8 +53,8 @@ test("renders tasks in server HTML with JavaScript disabled", async ({
   request,
 }) => {
   await api.tasks.create.mutate({
-    titulo: "Server rendered task",
-    descricao: "Visible before hydration.",
+    title: "Server rendered task",
+    description: "Visible before hydration.",
   });
   const response = await request.get("/");
   expect(await response.text()).toContain("Server rendered task");
@@ -69,7 +69,7 @@ test("renders tasks in server HTML with JavaScript disabled", async ({
 
 test("loads remaining pages on scroll without duplicates", async ({ page }) => {
   for (let i = 1; i <= 23; i++)
-    await api.tasks.create.mutate({ titulo: `Task ${i}` });
+    await api.tasks.create.mutate({ title: `Task ${i}` });
   await page.goto("/");
   await expect(page.getByRole("listitem")).toHaveCount(10);
   for (let i = 0; i < 2; i++) {
@@ -84,11 +84,11 @@ test("loads remaining pages on scroll without duplicates", async ({ page }) => {
 });
 
 test("shows validation and not-found errors over HTTP", async ({ page }) => {
-  await expect(api.tasks.create.mutate({ titulo: " " })).rejects.toThrow(
+  await expect(api.tasks.create.mutate({ title: " " })).rejects.toThrow(
     "Title is required.",
   );
   await expect(
-    api.tasks.update.mutate({ id: crypto.randomUUID(), titulo: "Missing" }),
+    api.tasks.update.mutate({ id: crypto.randomUUID(), title: "Missing" }),
   ).rejects.toThrow("Task not found.");
   await page.goto("/tasks/invalid/edit");
   await expect(
@@ -121,7 +121,7 @@ test("keeps form input on network failure and allows retry", async ({
 });
 
 test("reports failed deletion and retries successfully", async ({ page }) => {
-  await api.tasks.create.mutate({ titulo: "Delete retry" });
+  await api.tasks.create.mutate({ title: "Delete retry" });
   await page.goto("/");
   await page.route("**/api/trpc/**", (route) => route.abort());
   await page.getByRole("button", { name: "Delete Delete retry" }).click();
@@ -138,7 +138,7 @@ test("reports failed deletion and retries successfully", async ({ page }) => {
 
 test("retries incremental loading after network failure", async ({ page }) => {
   for (let i = 1; i <= 11; i++)
-    await api.tasks.create.mutate({ titulo: `Page task ${i}` });
+    await api.tasks.create.mutate({ title: `Page task ${i}` });
   await page.goto("/");
   await page.route("**/api/trpc/**", (route) => route.abort());
   await page
@@ -157,8 +157,8 @@ test("supports a narrow mobile viewport without horizontal overflow", async ({
   page,
 }) => {
   await api.tasks.create.mutate({
-    titulo: "Plan the week",
-    descricao: "Review priorities and prepare the next delivery.",
+    title: "Plan the week",
+    description: "Review priorities and prepare the next delivery.",
   });
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
@@ -175,7 +175,7 @@ test("supports a narrow mobile viewport without horizontal overflow", async ({
 test("surfaces a backend error when an open task is deleted elsewhere", async ({
   page,
 }) => {
-  const task = await api.tasks.create.mutate({ titulo: "Shared task" });
+  const task = await api.tasks.create.mutate({ title: "Shared task" });
   await page.goto(`/tasks/${task.id}/edit`);
   await api.tasks.delete.mutate({ id: task.id });
   await page.getByLabel("Title (required)").fill("Updated task");
@@ -190,7 +190,7 @@ test("offers manual pagination without IntersectionObserver", async ({
   page,
 }) => {
   for (let i = 1; i <= 11; i++)
-    await api.tasks.create.mutate({ titulo: `Manual task ${i}` });
+    await api.tasks.create.mutate({ title: `Manual task ${i}` });
   await page.addInitScript(() => {
     Reflect.deleteProperty(window, "IntersectionObserver");
   });

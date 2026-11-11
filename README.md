@@ -51,26 +51,26 @@ Forms validate before submission, disable controls while saving, preserve input 
 
 ## Data and API
 
-The field names follow the original challenge:
+Task fields use English names throughout the application:
 
 | Field       | Type             | Rules                                               |
 | ----------- | ---------------- | --------------------------------------------------- |
 | id          | string           | Generated UUID                                      |
-| titulo      | string           | Required, trimmed, 1–120 characters                 |
-| descricao   | string, optional | Trimmed, at most 2,000 characters                   |
-| dataCriacao | number           | Unix timestamp in milliseconds; preserved on update |
+| title       | string           | Required, trimmed, 1–120 characters                  |
+| description | string, optional | Trimmed, at most 2,000 characters                    |
+| createdAt   | number           | Unix timestamp in milliseconds; preserved on update |
 
 The tasks router exposes:
 
 | Procedure    | Input                          | Output               |
 | ------------ | ------------------------------ | -------------------- |
-| tasks.create | titulo, optional descricao     | Created task         |
+| tasks.create | title, optional description    | Created task         |
 | tasks.list   | Optional cursor and limit      | items and nextCursor |
 | tasks.get    | id                             | One task             |
-| tasks.update | id, titulo, optional descricao | Updated task         |
+| tasks.update | id, title, optional description | Updated task         |
 | tasks.delete | id                             | Deleted id           |
 
-Update replaces the editable fields; omitting descricao clears it. Invalid input returns BAD_REQUEST, and missing IDs return NOT_FOUND. Client and server share the same Zod field schema.
+Update replaces the editable fields; omitting description clears it. Invalid input returns BAD_REQUEST, and missing IDs return NOT_FOUND. Client and server share the same Zod field schema.
 
 List defaults to ten tasks, allows up to fifty, and returns null for nextCursor at the end. Tasks appear in creation order, oldest first. An internal increasing sequence serves as the cursor, so deleting earlier tasks does not shift subsequent pages. The sequence is internal and is not part of the task model.
 
